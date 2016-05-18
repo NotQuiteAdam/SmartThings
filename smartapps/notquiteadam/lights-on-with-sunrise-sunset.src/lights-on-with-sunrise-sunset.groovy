@@ -25,11 +25,14 @@ definition(
 
 
 preferences {
-	section("When I arrive and leave...") {
+	section("When someone isn't home after sunset...") {
 		input "presence1", "capability.presenceSensor", title: "Who?", multiple: true
 	}
-    section("Turn on/off a light..."){
+	section("Turn on a light..."){
 		input "switch1", "capability.switch", multiple: true
+	}
+	section("When returning home, turn light off after...") {
+		input "minutes1", "number", required:true
 	}
 }
 
@@ -45,7 +48,8 @@ def updated() {
 def presenceHandler(evt)
 {
 	def now = new Date()
-	def sunTime = getSunriseAndSunset();
+	def sunTime = getSunriseAndSunset()
+	def sunsOut = null
     
 	log.debug "nowTime: $now"
 	log.debug "riseTime: $sunTime.sunrise"
@@ -54,19 +58,32 @@ def presenceHandler(evt)
     
 	def current = presence1.currentValue("presence")
 	log.debug current
-    
+	
+	def offHandler (){
+		switch1.off()
+	}
+	
+	if ((now > sunTime.sunrise) && (now < sunTime.sunset)){
+		sunsOut = 1
+		log.debug "Sun is out"
+	}
+    	else {
+    		sunsOut = 0 
+    		log.debug "Sun is not out"
+    	}
+    	
 	def presenceValue = presence1.find{it.currentPresence == "not present"}
 	log.debug presenceValue
         
-	if(presenceValue && (now > sunTime.sunset)) {
+	if(presenceValue && (sunsOut == 0)) {
 		switch1.on()
 		log.debug "It's night time. Someone isn't home. Turning on lights."
 	}
-    else if(presenceValue && (now < sunTime.sunset)) {
+	else if(presenceValue && (sunsOut == 1)) {
     	log.debug "It's day time. Someone isn't home. Leaving lights off."
-    }
+	}
 	else {
-		switch1.off()
+		runIn(60*minutes1, offHandler)
 		log.debug "Just turn it off."
 	}
 }
