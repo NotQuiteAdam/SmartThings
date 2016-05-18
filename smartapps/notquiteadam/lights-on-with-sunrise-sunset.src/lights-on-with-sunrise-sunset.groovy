@@ -58,11 +58,7 @@ def presenceHandler(evt)
     
 	def current = presence1.currentValue("presence")
 	log.debug current
-	
-	def offHandler (){
-		switch1.off()
-	}
-	
+		
 	if ((now > sunTime.sunrise) && (now < sunTime.sunset)){
 		sunsOut = 1
 		log.debug "Sun is out"
@@ -87,3 +83,7 @@ def presenceHandler(evt)
 		log.debug "Just turn it off."
 	}
 }
+
+	def offHandler (){
+		switch1.off()
+	}
