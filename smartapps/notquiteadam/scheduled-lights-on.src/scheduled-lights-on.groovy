@@ -17,7 +17,7 @@ definition(
     name: "Scheduled Lights On",
     namespace: "NotQuiteAdam",
     author: "Adam Aiello",
-    description: "Simple repeating schedule for lights at a specific time. ",
+    description: "Simple daily repeating schedule for lights.",
     category: "Convenience",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -30,6 +30,9 @@ preferences {
     }
     section ("Turn on these lights"){
     	input "theSwitches", "capability.switch", multiple:true
+    }
+    section ("Off time..."){
+    	input "offTime", "time", title: "Time to execute every day"
     }
 }
 
@@ -44,9 +47,13 @@ def updated() {
 
 def initialize() {
 	schedule(theTime, handler)
+	schedule(offTime, offHandler)
 }
 
 // called every day at the time specified by the user
 def handler() {
     theSwitches.on()
+}
+def offHandler() {
+    theSwitches.off()
 }
