@@ -17,7 +17,7 @@ definition(
     name: "Lights on with Sunrise / Sunset",
     namespace: "NotQuiteAdam",
     author: "Adam",
-    description: "Light control based on sunrise / sunset -- will add presence modifier as well. ",
+    description: "Light control based on sunrise / sunset & presence.",
     category: "Convenience",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -38,11 +38,15 @@ preferences {
 
 def installed() {
 	subscribe(presence1, "presence", presenceHandler)
+	subscribe(location, "sunset", presenceHandler)
+    	subscribe(location, "sunrise", presenceHandler)
 }
 
 def updated() {
 	unsubscribe()
 	subscribe(presence1, "presence", presenceHandler)
+	subscribe(location, "sunset", presenceHandler)
+    	subscribe(location, "sunrise", presenceHandler)
 }
 
 def presenceHandler(evt)
