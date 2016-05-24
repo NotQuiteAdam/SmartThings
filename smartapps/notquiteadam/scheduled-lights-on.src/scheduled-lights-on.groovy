@@ -19,9 +19,9 @@ definition(
     author: "Adam Aiello",
     description: "Simple daily repeating schedule for lights.",
     category: "Convenience",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
-    iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")
+    iconUrl: "http://cdn.device-icons.smartthings.com/Lighting/light9-icn.png",
+    iconX2Url: "http://cdn.device-icons.smartthings.com/Lighting/light9-icn@2x.png",
+    iconX3Url: "http://cdn.device-icons.smartthings.com/Lighting/light9-icn@3x.png")
 
 
 preferences {
