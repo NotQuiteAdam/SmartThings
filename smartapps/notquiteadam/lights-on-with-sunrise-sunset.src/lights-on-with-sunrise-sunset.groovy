@@ -32,7 +32,7 @@ preferences {
 		input "switch1", "capability.switch", multiple: true
 	}
 	section("When returning home, turn light off after...") {
-		input "minutes1", "number", required:true
+		input "minutes1", "number", title: "Minutes", required:true
 	}
 }
 
