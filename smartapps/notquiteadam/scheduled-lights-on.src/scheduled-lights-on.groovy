@@ -14,10 +14,10 @@
  *
  */
 definition(
-    name: "Scheduled Lights On",
+    name: "Scheduled Device On & Off",
     namespace: "NotQuiteAdam",
     author: "Adam Aiello",
-    description: "Simple daily repeating schedule for lights.",
+    description: "Simple weekly repeating schedule for lights.",
     category: "Convenience",
     iconUrl: "http://cdn.device-icons.smartthings.com/Lighting/light9-icn.png",
     iconX2Url: "http://cdn.device-icons.smartthings.com/Lighting/light9-icn@2x.png",
@@ -25,14 +25,17 @@ definition(
 
 
 preferences {
-	section ("Daily time..."){
-    	input "theTime", "time", title: "Time to execute every day"
-    }
-    section ("Turn on these lights"){
-    	input "theSwitches", "capability.switch", multiple:true
-    }
-    section ("Off time..."){
-    	input "offTime", "time", title: "Time to execute every day"
+	section ("On time..."){
+    		input "theTime", "time", title: "Time to execute every day"
+	}
+	section("On which Days?") {
+		input "dayOfWeek", "enum", title:"Select Days", required: true, multiple:true, metadata: [values: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']]
+	}
+    	section ("Turn on these devices"){
+    		input "theSwitches", "capability.switch", multiple:true
+	}
+    	section ("Off time..."){
+    		input "offTime", "time", title: "Time to execute every day"
     }
 }
 
@@ -52,8 +55,14 @@ def initialize() {
 
 // called every day at the time specified by the user
 def handler() {
-    theSwitches.on()
+	def dayCheck = dayOfWeek.contains(new Date().format("EEE"))
+	if(dayCheck){
+    		theSwitches.on()
+	}
 }
 def offHandler() {
-    theSwitches.off()
+	def dayCheck = dayOfWeek.contains(new Date().format("EEE"))
+	if(dayCheck){
+    		theSwitches.off()
+	}
 }
