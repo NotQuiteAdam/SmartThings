@@ -16,8 +16,8 @@
 definition(
     name: "Lights on with Sunrise / Sunset",
     namespace: "NotQuiteAdam",
-    author: "Adam",
-    description: "Light control based on sunrise / sunset & presence.",
+    author: "Adam Aiello",
+    description: "Device control based on sunrise / sunset & presence.",
     category: "Convenience",
     iconUrl: "http://cdn.device-icons.smartthings.com/Weather/weather4-icn.png",
     iconX2Url: "http://cdn.device-icons.smartthings.com/Weather/weather4-icn@2x.png",
@@ -49,38 +49,29 @@ def updated() {
     	subscribe(location, "sunrise", presenceHandler)
 }
 
-def presenceHandler(evt)
-{
+def presenceHandler(evt){
+	
 	def now = new Date()
 	def sunTime = getSunriseAndSunset()
 	def sunsOut = null
-    
-	log.debug "nowTime: $now"
-	log.debug "riseTime: $sunTime.sunrise"
-	log.debug "setTime: $sunTime.sunset"
-	log.debug "presenceHandler $evt.name: $evt.value"
-    
 	def current = presence1.currentValue("presence")
-	log.debug current
-		
+
 	if ((now > sunTime.sunrise) && (now < sunTime.sunset)){
 		sunsOut = 1
-		log.debug "Sun is out"
 	}
     	else {
     		sunsOut = 0 
-    		log.debug "Sun is not out"
     	}
     	
 	def presenceValue = presence1.find{it.currentPresence == "not present"}
-	log.debug presenceValue
+
         
 	if(presenceValue && (sunsOut == 0)) {
 		switch1.on()
 		log.debug "It's night time. Someone isn't home. Turning on lights."
 	}
 	else if(presenceValue && (sunsOut == 1)) {
-    	log.debug "It's day time. Someone isn't home. Leaving lights off."
+    		log.debug "It's day time. Someone isn't home. Leaving lights off."
 	}
 	else {
 		runIn(60*minutes1, offHandler)
@@ -88,6 +79,6 @@ def presenceHandler(evt)
 	}
 }
 
-	def offHandler (){
-		switch1.off()
-	}
+def offHandler (){
+	switch1.off()
+}
