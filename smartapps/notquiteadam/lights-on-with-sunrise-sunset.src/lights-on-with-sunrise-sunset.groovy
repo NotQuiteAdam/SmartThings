@@ -39,14 +39,14 @@ preferences {
 def installed() {
 	subscribe(presence1, "presence", presenceHandler)
 	subscribe(location, "sunset", presenceHandler)
-    	subscribe(location, "sunrise", presenceHandler)
+    subscribe(location, "sunrise", presenceHandler)
 }
 
 def updated() {
 	unsubscribe()
 	subscribe(presence1, "presence", presenceHandler)
 	subscribe(location, "sunset", presenceHandler)
-    	subscribe(location, "sunrise", presenceHandler)
+    subscribe(location, "sunrise", presenceHandler)
 }
 
 def presenceHandler(evt){
@@ -71,7 +71,8 @@ def presenceHandler(evt){
 		log.debug "It's night time. Someone isn't home. Turning on lights."
 	}
 	else if(presenceValue && (sunsOut == 1)) {
-    		log.debug "It's day time. Someone isn't home. Leaving lights off."
+    	log.debug "It's day time. Someone isn't home. Turning lights off."
+        switch1.off()
 	}
 	else {
 		runIn(60*minutes1, offHandler)
